@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Tools - Word Counter, Case Converter & More</title>
+    <meta name="description" content="A free online utility to count words, characters, convert text case (uppercase, lowercase, title case), and remove extra spaces. All tools work in your browser, instantly. free tools for daily life, easy, application,Paragraph and many more">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Custom styles for a polished look */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom scrollbar for a better dark mode experience */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background-color: #1f2937; /* dark:bg-gray-800 */
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #4b5563; /* dark:bg-gray-600 */
+            border-radius: 10px;
+        }
+        html.light ::-webkit-scrollbar-track {
+            background-color: #f3f4f6; /* light:bg-gray-100 */
+        }
+        html.light ::-webkit-scrollbar-thumb {
+            background-color: #d1d5db; /* light:bg-gray-300 */
+        }
+        /* Custom transition for all elements */
+        * {
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+        .btn-feedback {
+            background-color: #22c55e !important; /* green-500 */
+            color: white !important;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 antialiased">
+
+    <div class="container mx-auto px-4 py-8 md:py-12">
+        
+        <!-- Header -->
+        <header class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">Text <span class="text-indigo-500">Tools</span></h1>
+            <button id="darkModeToggle" class="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <!-- Sun Icon -->
+                <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+                <!-- Moon Icon -->
+                <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+            </button>
+        </header>
+
+        <main class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg">
+            
+            <!-- Input Text Area -->
+            <div class="relative">
+                <textarea id="textInput" class="w-full h-48 p-4 bg-gray-50 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 resize-y" placeholder="Start typing or paste your text here..."></textarea>
+                <button id="clearTextBtn" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Ad Placeholder -->
+            <div class="my-4 text-center text-sm text-gray-400">
+                <!-- Monetag In-Page Push Ad Code Here -->
+                 <p>(Ad placeholder)</p>
+            </div>
+
+
+            <!-- Real-time Stats -->
+            <div id="stats" class="grid grid-cols-2 md:grid-cols-4 gap-4 my-6 text-center">
+                <div class="p-4 bg-gray-100 dark:bg-gray-700/50 rounded-lg">
+                    <p class="text-2xl font-bold" id="wordCount">0</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Words</p>
+                </div>
+                <div class="p-4 bg-gray-100 dark:bg-gray-700/50 rounded-lg">
+                    <p class="text-2xl font-bold" id="charCount">0</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Characters</p>
+                </div>
+                <div class="p-4 bg-gray-100 dark:bg-gray-700/50 rounded-lg">
+                    <p class="text-2xl font-bold" id="sentenceCount">0</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Sentences</p>
+                </div>
+                <div class="p-4 bg-gray-100 dark:bg-gray-700/50 rounded-lg">
+                    <p class="text-2xl font-bold" id="paragraphCount">0</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Paragraphs</p>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+                <button id="upperCaseBtn" class="tool-btn bg-indigo-500 hover:bg-indigo-600">UPPERCASE</button>
+                <button id="lowerCaseBtn" class="tool-btn bg-indigo-500 hover:bg-indigo-600">lowercase</button>
+                <button id="titleCaseBtn" class="tool-btn bg-indigo-500 hover:bg-indigo-600">Title Case</button>
+                <button id="capitalizedCaseBtn" class="tool-btn bg-indigo-500 hover:bg-indigo-600">Capitalized</button>
+                <button id="removeSpacesBtn" class="tool-btn bg-red-500 hover:bg-red-600 sm:col-start-auto col-span-2 sm:col-span-1">Clean Spaces</button>
+            </div>
+            
+            <!-- Output Area -->
+            <div class="mt-8">
+                <h2 class="text-xl font-semibold mb-2">Result:</h2>
+                 <div class="relative">
+                    <textarea id="output" readonly class="w-full h-48 p-4 bg-gray-100 dark:bg-gray-900/50 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg resize-y" placeholder="Your result will appear here..."></textarea>
+                    <button id="copyOutputBtn" data-clipboard-target="#output" class="absolute top-3 right-3 text-gray-400 hover:text-indigo-500 dark:hover:text-indigo-400 p-2 rounded-md bg-gray-200 dark:bg-gray-800">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                           <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                        </svg>
+                    </button>
+                 </div>
+            </div>
+
+        </main>
+        
+        <!-- Footer -->
+        <footer class="text-center mt-8 text-sm text-gray-500 dark:text-gray-400">
+            <p>Made with ❤️ for simple text manipulation.</p>
+        </footer>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- DOM Element References ---
+            const textInput = document.getElementById('textInput');
+            const output = document.getElementById('output');
+            const clearTextBtn = document.getElementById('clearTextBtn');
+            const wordCountEl = document.getElementById('wordCount');
+            const charCountEl = document.getElementById('charCount');
+            const sentenceCountEl = document.getElementById('sentenceCount');
+            const paragraphCountEl = document.getElementById('paragraphCount');
+            
+            // Tool buttons
+            const upperCaseBtn = document.getElementById('upperCaseBtn');
+            const lowerCaseBtn = document.getElementById('lowerCaseBtn');
+            const titleCaseBtn = document.getElementById('titleCaseBtn');
+            const capitalizedCaseBtn = document.getElementById('capitalizedCaseBtn');
+            const removeSpacesBtn = document.getElementById('removeSpacesBtn');
+            const copyOutputBtn = document.getElementById('copyOutputBtn');
+
+            // Dark Mode Elements
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            const sunIcon = document.getElementById('sunIcon');
+            const moonIcon = document.getElementById('moonIcon');
+
+            // --- Dark Mode Logic ---
+            const applyTheme = (theme) => {
+                if (theme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                    document.documentElement.classList.remove('light');
+                    sunIcon.classList.add('hidden');
+                    moonIcon.classList.remove('hidden');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    document.documentElement.classList.add('light');
+                    sunIcon.classList.remove('hidden');
+                    moonIcon.classList.add('hidden');
+                }
+            };
+            
+            // Check for saved theme in localStorage
+            const savedTheme = localStorage.getItem('theme') || 'dark'; // Default to dark
+            applyTheme(savedTheme);
+
+            darkModeToggle.addEventListener('click', () => {
+                const currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                localStorage.setItem('theme', newTheme);
+                applyTheme(newTheme);
+            });
+
+
+            // --- Core Functionality ---
+
+            // Function to analyze text and update stats
+            const analyzeText = () => {
+                const text = textInput.value;
+                
+                // Word Count
+                const words = text.match(/\b\w+\b/g) || [];
+                wordCountEl.textContent = words.length;
+
+                // Character Count
+                charCountEl.textContent = text.length;
+
+                // Sentence Count
+                const sentences = text.match(/[^.!?]+[.!?]+/g) || [];
+                sentenceCountEl.textContent = sentences.length;
+
+                // Paragraph Count
+                const paragraphs = text.split(/\n+/).filter(p => p.trim().length > 0);
+                paragraphCountEl.textContent = paragraphs.length;
+            };
+
+            // Update output and re-analyze
+            const updateOutput = (newText) => {
+                output.value = newText;
+            };
+
+            // Event listener for real-time analysis
+            textInput.addEventListener('input', analyzeText);
+
+            // Clear input button
+            clearTextBtn.addEventListener('click', () => {
+                textInput.value = '';
+                output.value = '';
+                analyzeText();
+            });
+
+
+            // --- Tool Button Logic ---
+
+            upperCaseBtn.addEventListener('click', () => {
+                updateOutput(textInput.value.toUpperCase());
+            });
+
+            lowerCaseBtn.addEventListener('click', () => {
+                updateOutput(textInput.value.toLowerCase());
+            });
+
+            titleCaseBtn.addEventListener('click', () => {
+                const newText = textInput.value.toLowerCase().replace(/\b(\w)/g, s => s.toUpperCase());
+                updateOutput(newText);
+            });
+
+            capitalizedCaseBtn.addEventListener('click', () => {
+                const newText = textInput.value.toLowerCase().replace(/(^\s*\w|[\.\!\?]\s*\w)/g, c => c.toUpperCase());
+                updateOutput(newText);
+            });
+
+            removeSpacesBtn.addEventListener('click', () => {
+                const newText = textInput.value.replace(/\s+/g, ' ').trim();
+                updateOutput(newText);
+            });
+
+            // Copy to Clipboard
+            copyOutputBtn.addEventListener('click', () => {
+                if (!output.value) return; // Don't copy if empty
+
+                // Fallback method for older browsers or restricted environments (like iframes)
+                const textArea = document.createElement("textarea");
+                textArea.value = output.value;
+                
+                // Avoid scrolling to bottom
+                textArea.style.top = "0";
+                textArea.style.left = "0";
+                textArea.style.position = "fixed";
+
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+
+                try {
+                    document.execCommand('copy');
+                    
+                    // Visual feedback
+                    const originalIcon = copyOutputBtn.innerHTML;
+                    copyOutputBtn.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                           <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                    `;
+                    setTimeout(() => {
+                        copyOutputBtn.innerHTML = originalIcon;
+                    }, 2000);
+
+                } catch (err) {
+                    console.error('Fallback: Oops, unable to copy', err);
+                }
+
+                document.body.removeChild(textArea);
+            });
+
+
+            // --- Initial State ---
+            analyzeText(); // Initial analysis on load
+
+        });
+    </script>
+</body>
+</html>
